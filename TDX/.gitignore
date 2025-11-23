@@ -1,0 +1,35 @@
+```
+# Swift/Xcode
+*.swiftmodule
+*.swiftdoc
+*.xcworkspace
+xcuserdata/
+DerivedData/
+*.xcodeproj/
+*.playground
+*.storyboardc
+
+# Build artifacts
+build/
+*.build/
+*.app
+*.framework
+*.dylib
+*.a
+
+# Dependencies
+Carthage/
+Pods/
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+```
