@@ -16,7 +16,7 @@ struct Movie: Decodable{
     
     
     enum CodingKeys: String, CodingKey {
-        case title = " orginal_title"
+        case title = "original_title"
         case releaseDate = "release_date"
         case posterPath = "poster_path"
         case description = "overview"
