@@ -29,6 +29,7 @@ class MovieService {
     private let apiKey = "0f11b9f739cc213a2f034673163e2dc0"
     private let baseURL = "https://api.themoviedb.org/3"
     
+    static let shared = MovieService()
     
     func fetchPopularMovies() async throws -> [Movie] {
         
