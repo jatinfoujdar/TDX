@@ -30,10 +30,20 @@ class MovieViewModel: ObservableObject{
         
         do{
             let fetchMovies = try await movieService.fetchPopularMovies()
-        }catch{
             
+            movies = fetchMovies
+            loadingState = .success
+        }catch{
+            errorMessage = error.localizedDescription
+            loadingState = .error(errorMessage.localizedDescription)
         }
     }
+    
+    func getImageURL(path: String?, size: String = "w500") -> URL? {
+           return movieService.buildImageURL(path: path, size: size)
+       }
+    
+    
     
     
 }
