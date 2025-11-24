@@ -57,7 +57,7 @@ class MovieService {
         }
     }
     
-    func fetchMovie(by id: Int) async throws -> [Movie] {
+    func fetchMovie(by id: Int) async throws -> Movie {
         
         guard let url = URL(string: "\(baseURL)/movie/\(id)?api_key=\(apiKey)&language=en-US")else{
             throw MovieAPIError.invalidURL
@@ -73,7 +73,7 @@ class MovieService {
         do{
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let movies = try decoder.decode([Movie].self, from: data)
+            let movies = try decoder.decode(Movie.self, from: data)
             return movies
         } catch {
             throw MovieAPIError.decodingError

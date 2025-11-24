@@ -35,13 +35,25 @@ class MovieViewModel: ObservableObject{
             loadingState = .success
         }catch{
             errorMessage = error.localizedDescription
-            loadingState = .error(errorMessage.localizedDescription)
+            loadingState = .error(error.localizedDescription)
         }
     }
     
     func getImageURL(path: String?, size: String = "w500") -> URL? {
-           return movieService.buildImageURL(path: path, size: size)
-       }
+        return movieService.buildImageURL(path: path, size: size)
+    }
+    
+    
+    
+    func getMovieDetail(movieId: Int) async -> Movie? {
+        do {
+            let movie = try await movieService.fetchMovie(by: movieId)
+            return movie
+        } catch {
+            print("Error fetching movie detail: \(error)")
+            return nil
+        }
+    }
     
     
     
