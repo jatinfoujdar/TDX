@@ -37,11 +37,18 @@ class MovieService {
             throw MovieAPIError.invalidURL
         }
         
-        let (data , response) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession.shared.data(from: url)
         
         guard let httpResponse = response as? HTTPURLResponse,
               200...299 ~= httpResponse.statusCode else  {
             throw MovieAPIError.noData
+        }
+        
+        if let http = response as? HTTPURLResponse {
+            print("HTTP status:", http.statusCode)
+        }
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("RAW JSON from /movie/popular:\n", jsonString)
         }
         
         do{

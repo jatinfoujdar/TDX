@@ -8,7 +8,7 @@ import Combine
 import Foundation
 import SwiftUI
 
-enum loadingState{
+enum LoadingState{
     case idle
     case loading
     case success
@@ -19,7 +19,7 @@ enum loadingState{
 @MainActor
 class MovieViewModel: ObservableObject{
     @Published var movies: [Movie] = []
-    @Published var loadingState: loadingState = .idle
+    @Published var loadingState: LoadingState = .idle
     @Published var errorMessage: String = ""
     
     

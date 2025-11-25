@@ -17,17 +17,26 @@ struct Movie: Codable, Identifiable {
     let voteAverage: Double
     let voteCount: Int
     
-    enum CodingKeys: String, CodingKey {
-        case id
-        case title
-        case overview
-        case posterPath = "poster_path"
-        case backdropPath = "backdrop_path"
-        case releaseDate = "release_date"
-        case voteAverage = "vote_average"
-        case voteCount = "vote_count"
+    
+    init(id: Int, title: String, overview: String, posterPath: String?, backdropPath: String?, releaseDate: String, voteAverage: Double, voteCount: Int) {
+        self.id = id
+        self.title = title
+        self.overview = overview
+        self.posterPath = posterPath
+        self.backdropPath = backdropPath
+        self.releaseDate = releaseDate
+        self.voteAverage = voteAverage
+        self.voteCount = voteCount
     }
+
 }
+
+
+struct MovieResponse: Decodable {
+    let results: [Movie]
+}
+
+
 
 extension Movie {
    
