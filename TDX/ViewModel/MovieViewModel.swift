@@ -54,8 +54,19 @@ class MovieViewModel: ObservableObject{
             return nil
         }
     }
-    
-    
-    
-    
 }
+    
+    
+    struct MovieViewModel_Previews: PreviewProvider {
+        static var previews: some View {
+            // Create a preview instance with sample data
+            let viewModel = MovieViewModel()
+            viewModel.movies = Movie.sampleMovies
+            viewModel.loadingState = .success
+            
+            return ContentView()
+                .environmentObject(viewModel)
+        }
+    }
+    
+
