@@ -87,6 +87,32 @@ class MovieService {
         }
     }
     
+    func searchMovie(query: String) async throws -> [Movie]{
+        
+    guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+    let url = URL(string: "\(baseURL)/search/movie?api_key=\(apiKey)&language=en-US&query=\(encodedQuery)&page=1&include_adult=false")
+        else{
+            throw MovieAPIError.invalidURL
+        }
+        
+        let(data, response) = try await URLSession.shared.data(from: url)
+        guard let httpResponse = response as? HTTPURLResponse,
+              200...299 ~= httpResponse.statusCode else{
+            throw MovieAPIError.noData
+        }
+        
+        do{
+            let jsonResult = try JSONSerialization.jsonObject(with: data) as? [String : Any]
+            let resultsData = try JSONSerialization.data(withJSONObject: jsonResult?["results"] ?? [])
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let movies = try decoder.decode([Movie].self, from: resultsData)
+            return movies
+        } catch {
+            throw MovieAPIError.decodingError
+        }
+    }
+    
     func buildImageURL(path: String?, size: String = "w500") -> URL? {
         guard let path = path else { return nil }
         return URL(string: "https://image.tmdb.org/t/p/\(size)\(path)")
