@@ -29,10 +29,9 @@ class SearchHistoryManager {
             current = Array(current.prefix(10))
         }
         UserDefaults.standard.set(current, forKey: key)
-        
-        func clearHistory(){
-            UserDefaults.standard.removeObject(forKey: key)
-        }
     }
-    
+    func clearHistory(){
+        UserDefaults.standard.removeObject(forKey: key)
+    }
 }
+    

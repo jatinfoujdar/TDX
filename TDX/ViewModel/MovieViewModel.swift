@@ -43,7 +43,22 @@ class MovieViewModel: ObservableObject{
         return movieService.buildImageURL(path: path, size: size)
     }
     
-    
+    func searchMovies(query: String) async{
+        guard !query.isEmpty else{
+            await fetchMovies()
+            return
+        }
+        loadingState = .loading
+        
+        do{
+            let searchResults = try await movieService.searchMovie(query: query)
+            movies = searchResults
+            loadingState = .success
+        }catch{
+            errorMessage = error.localizedDescription
+            loadingState = .error(error.localizedDescription)
+        }
+    }
     
     func getMovieDetail(movieId: Int) async -> Movie? {
         do {
