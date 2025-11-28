@@ -25,7 +25,7 @@ class SearchHistoryManager {
         }
         current.insert(term, at: 0)
         
-        if current.count >= 10{
+        if current.count > 10{
             current = Array(current.prefix(10))
         }
         UserDefaults.standard.set(current, forKey: key)
