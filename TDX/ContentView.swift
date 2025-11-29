@@ -10,26 +10,56 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var viewModel = MovieViewModel()
     @State private var searchText: String = ""
-//    @State private var isSearchFocused: Bool
-//    @State private var recentSearches : [String] = []
+    @State private var isSearchFocused: Bool = false
+    @State private var recentSearches : [String] = []
     
     var body: some View {
         NavigationStack {
-                        
-            content
-                .searchable(text: $searchText,placement: .navigationBarDrawer(displayMode: .always),prompt: "Search..." )
-                .onChange(of: searchText){
-                    Task{
-                        if searchText.isEmpty{
-                            await viewModel.fetchMovies()
-                        }else{
-                            await viewModel.searchMovies(query: searchText)
+            ZStack{
+                content
+                
+                if isSearchFocused && searchText.isEmpty && !recentSearches.isEmpty{
+                    RecentSearchesView(items: recentSearches, onSelect: { selectedTerm in
+                        searchText = selectedTerm
+                        isSearchFocused = true
+                        Task{
+                            await viewModel.searchMovies(query: selectedTerm)
                         }
-                    }
+                    }, onClear:{
+                        SearchHistoryManager.shared.clearHistory()
+                        recentSearches = []
+                    })
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+                    .zIndex(1)
                 }
-                .navigationTitle("Popular Movies")
+            }
+            .navigationTitle("Popular Movies")
+        }
+        .searchable(text: $searchText,
+                    isPresented: $isSearchFocused,
+                    placement: .navigationBarDrawer(displayMode: .automatic),
+                    prompt: "Search....")
+        .onSubmit(of: .search) {
+            Task{
+                await viewModel.searchMovies(query: searchText)
+            }
+            SearchHistoryManager.shared.addSearch(searchText)
+            recentSearches = SearchHistoryManager.shared.getRecentSearches()
+        }
+        .onChange(of: searchText){ newValue in
+            if newValue.isEmpty{
+                Task{
+                    await viewModel.fetchMovies()
+                }
+            }
+        }
+        .onAppear{
+            recentSearches = SearchHistoryManager.shared.getRecentSearches()
         }
     }
+    
+                   
+     
     
     
     @ViewBuilder
