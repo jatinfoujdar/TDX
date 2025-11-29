@@ -15,7 +15,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack{
+            ZStack(alignment: .top){
                 content
                 
                 if isSearchFocused && searchText.isEmpty && !recentSearches.isEmpty{
